@@ -1,0 +1,9 @@
+# Core Libraries
+python-dotenv
+beautifulsoup4
+sentence-transformers
+elasticsearch
+
+# For future PDF parsing, you might need one of these:
+# pymupdf
+# pypdf

@@ -1,0 +1,5 @@
+python-dotenv
+elasticsearch==8.16.0
+sentence-transformers
+google-generativeai
+typer[all]

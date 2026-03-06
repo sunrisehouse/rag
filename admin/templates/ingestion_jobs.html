@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingestion Jobs</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="sidebar">
+        <h5>Admin Menu</h5>
+        <div class="list-group mt-4">
+            <a href="/" class="list-group-item list-group-item-action">Home</a>
+            <a href="/crawl_jobs" class="list-group-item list-group-item-action">Crawl Jobs</a>
+            <a href="/crawled_pages" class="list-group-item list-group-item-action">Crawled Pages</a>
+            <a href="/ingestion_jobs" class="list-group-item list-group-item-action active">Ingestion Jobs</a>
+            <a href="/ingested_documents" class="list-group-item list-group-item-action">Ingested Documents</a>
+        </div>
+    </div>
+    <div class="main-content">
+        <h1 class="mt-5">Ingestion Jobs</h1>
+
+        <div class="d-flex justify-content-between align-items-center mt-4 mb-3">
+            <form id="search-form" class="d-flex gap-2">
+                <input type="text" class="form-control" name="status" placeholder="Filter by status...">
+                <input type="text" class="form-control" name="source_type" placeholder="Filter by source type...">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+            <div class="d-flex align-items-center gap-2">
+                <div id="total-count" class="text-nowrap"></div>
+                <select id="size-select" class="form-select">
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </div>
+        </div>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                    <th>Status</th>
+                    <th>Source Type</th>
+                    <th>Embedding Model</th>
+                </tr>
+            </thead>
+            <tbody id="data-table">
+            </tbody>
+        </table>
+        <nav>
+            <ul class="pagination">
+            </ul>
+        </nav>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        let currentPage = parseInt(params.get('page')) || 1;
+        let currentSize = parseInt(params.get('size')) || 10;
+        let currentStatus = params.get('status') || '';
+        let currentSourceType = params.get('source_type') || '';
+
+        document.getElementById('size-select').value = currentSize;
+        document.querySelector('input[name="status"]').value = currentStatus;
+        document.querySelector('input[name="source_type"]').value = currentSourceType;
+
+        async function fetchData() {
+            const query = new URLSearchParams({
+                page: currentPage,
+                size: currentSize,
+                status: currentStatus,
+                source_type: currentSourceType
+            });
+
+            const response = await fetch(`/api/ingestion_jobs?${query.toString()}`);
+            const data = await response.json();
+
+            const tbody = document.getElementById('data-table');
+            const pagination = document.querySelector('.pagination');
+            const totalCount = document.getElementById('total-count');
+
+            tbody.innerHTML = '';
+            data.items.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.id}</td>
+                    <td>${item.start_time}</td>
+                    <td>${item.end_time || ''}</td>
+                    <td>${item.status}</td>
+                    <td>${item.source_type}</td>
+                    <td>${item.embedding_model}</td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            totalCount.textContent = `Total: ${data.total}`;
+
+            pagination.innerHTML = '';
+            if (data.total_pages > 1) {
+                for (let i = 1; i <= data.total_pages; i++) {
+                    const li = document.createElement('li');
+                    const link = document.createElement('a');
+                    link.className = 'page-link';
+                    link.href = '#';
+                    link.textContent = i;
+                    link.dataset.page = i;
+
+                    if (i === data.page) {
+                        li.className = 'page-item active';
+                    } else {
+                        li.className = 'page-item';
+                    }
+
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        currentPage = parseInt(e.target.dataset.page);
+                        updateUrlAndFetch();
+                    });
+
+                    li.appendChild(link);
+                    pagination.appendChild(li);
+                }
+            }
+        }
+
+        function updateUrlAndFetch() {
+            const query = new URLSearchParams({
+                page: currentPage,
+                size: currentSize,
+                status: currentStatus,
+                source_type: currentSourceType
+            });
+            history.pushState(null, '', `?${query.toString()}`);
+            fetchData();
+        }
+
+        document.getElementById('search-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            currentStatus = e.target.elements.status.value;
+            currentSourceType = e.target.elements.source_type.value;
+            currentPage = 1;
+            updateUrlAndFetch();
+        });
+
+        document.getElementById('size-select').addEventListener('change', (e) => {
+            currentSize = parseInt(e.target.value);
+            currentPage = 1;
+            updateUrlAndFetch();
+        });
+
+        fetchData();
+    </script>
+</body>
+</html>
