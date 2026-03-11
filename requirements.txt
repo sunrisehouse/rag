@@ -1,0 +1,21 @@
+# --- Core LangChain ---
+langchain>=0.3.0
+langchain-core>=0.3.0
+langchain-community>=0.3.0
+
+# --- LLM & Embedding Connectors ---
+langchain-openai>=0.2.0        # 사내 LLM(OpenAI 호환 API) 연동용
+langchain-huggingface>=0.1.0   # BGE-M3 로컬 임베딩 모델 로드용
+sentence-transformers>=3.0.0   # 임베딩 엔진
+
+# --- Vector Store ---
+langchain-elasticsearch>=0.3.0 # Elasticsearch 8.16 연동용
+elasticsearch>=8.16.0          # ES 파이썬 클라이언트 최신 버전
+
+# --- Data Processing ---
+beautifulsoup4>=4.12.0         # Wiki HTML 파싱용
+lxml>=4.9.0                    # HTML 파싱 가속기
+python-dotenv>=1.0.0           # .env 환경변수 관리
+
+# --- Infrastructure & Utilities ---
+requests>=2.31.0               # API 통신용
