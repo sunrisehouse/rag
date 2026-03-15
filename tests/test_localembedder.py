@@ -5,7 +5,7 @@ import torch
 # 프로젝트 루트 경로 추가 (src 폴더 인식용)
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from src.embedder.local_embedder import LocalEmbedder
+from src.embedder import LocalEmbedder
 from src.logger import get_logger
 
 logger = get_logger(__name__)

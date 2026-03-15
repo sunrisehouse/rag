@@ -1,5 +1,11 @@
-from src.chain import TestQAChain
+import os
+import sys
 from langchain_core.documents import Document
+
+# 프로젝트 루트 경로 추가 (src 폴더 인식용)
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from src.chain import TestQAChain
 
 def run_test():
     qa_chain = TestQAChain()
