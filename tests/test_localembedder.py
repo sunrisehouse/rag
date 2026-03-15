@@ -6,7 +6,9 @@ import torch
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.embedder.local_embedder import LocalEmbedder
-from src.logger import logger
+from src.logger import get_logger
+
+logger = get_logger(__name__)
 
 def test_local_embedder():
     logger.info("=== 로컬 임베더 테스트 시작 ===")

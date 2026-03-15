@@ -1,21 +1,26 @@
-# --- Core LangChain ---
+# --- Core Framework (Pydantic V2 & Python 3.12+ 호환) ---
 langchain>=0.3.0
 langchain-core>=0.3.0
 langchain-community>=0.3.0
+pydantic>=2.7.0
+pydantic-settings>=2.2.0
 
-# --- LLM & Embedding Connectors ---
-langchain-openai>=0.2.0        # 사내 LLM(OpenAI 호환 API) 연동용
-langchain-huggingface>=0.1.0   # BGE-M3 로컬 임베딩 모델 로드용
-sentence-transformers>=3.0.0   # 임베딩 엔진
+# --- LLM & Embedding (Local & API) ---
+torch>=2.2.0                   # 로컬 모델 구동 엔진
+langchain-huggingface>=0.1.0   # BGE-M3 로드용 핵심 라이브러리
+sentence-transformers>=3.0.0   # 임베딩 성능 최적화
+langchain-openai>=0.2.0        # 사내 LLM API 연동용
 
 # --- Vector Store ---
-langchain-elasticsearch>=0.3.0 # Elasticsearch 8.16 연동용
-elasticsearch>=8.16.0          # ES 파이썬 클라이언트 최신 버전
+langchain-elasticsearch>=0.3.0 
+elasticsearch>=8.16.0          
 
 # --- Data Processing ---
-beautifulsoup4>=4.12.0         # Wiki HTML 파싱용
-lxml>=4.9.0                    # HTML 파싱 가속기
-python-dotenv>=1.0.0           # .env 환경변수 관리
+beautifulsoup4>=4.12.0         
+python-dotenv>=1.0.0           
+requests>=2.31.0               
+lxml>=4.9.0
+html5lib>=1.1
 
-# --- Infrastructure & Utilities ---
-requests>=2.31.0               # API 통신용
+# --- Utilities ---
+numpy<2.0.0                    # 최신 numpy와 torch 간의 호환성 유지

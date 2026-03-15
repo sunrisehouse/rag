@@ -8,7 +8,9 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from langchain_core.documents import Document
 from src.transformer.wiki_structure_transformer import WikiStructureTransformer
 from src.database.repository import Repository
-from src.logger import logger
+from src.logger import get_logger
+
+logger = get_logger(__name__)
 
 def test_transformer():
     logger.info("=== WikiStructureTransformer 테스트 시작 ===")
